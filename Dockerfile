@@ -1,6 +1,3 @@
-# Copyright (c) Jupyter Development Team.
-# Distributed under the terms of the Modified BSD License.
-
 # Ubuntu 20.04 (focal)
 # https://hub.docker.com/_/ubuntu/?tab=tags&name=focal
 # OS/ARCH: linux/amd64
@@ -8,8 +5,8 @@ ARG ROOT_CONTAINER=ubuntu:focal-20200703@sha256:d5a6519d9f048100123c568eb83f7ef5
 
 ARG BASE_CONTAINER=$ROOT_CONTAINER
 FROM $BASE_CONTAINER
+LABEL maintainer="RK"
 
-LABEL maintainer="Jupyter Project <jupyter@googlegroups.com>"
 ARG NB_USER="jovyan"
 ARG NB_UID="1000"
 ARG NB_GID="100"
@@ -145,7 +142,8 @@ RUN apt-get update \
 
 RUN mkdir /home/$NB_USER/bert_j
 RUN wget -P /home/$NB_USER/bert_j -q http://nlp.ist.i.kyoto-u.ac.jp/nl-resource/JapaneseBertPretrainedModel/Japanese_L-12_H-768_A-12_E-30_BPE_WWM_transformers.zip && \
-    cd  /home/jovyan/bert_j && unzip Japanese_L-12_H-768_A-12_E-30_BPE_WWM_transformers.zip
+    cd  /home/jovyan/bert_j && unzip Japanese_L-12_H-768_A-12_E-30_BPE_WWM_transformers.zip && \
+    rm -rf Japanese_L-12_H-768_A-12_E-30_BPE_WWM_transformers.zip
 
 USER $NB_USER
 RUN cd /home/$NB_USER/ && \
@@ -153,11 +151,14 @@ RUN cd /home/$NB_USER/ && \
     tar xJvf jumanpp-1.01.tar.xz && \
     cd jumanpp-1.01 && \
     ./configure && \
-    make && \
-    rm -rf jumanpp-1.01.tar.xz
+    make
 
 USER root
+RUN cd /home/$NB_USER/ && \
+    rm -rf jumanpp-1.01.tar.xz
 RUN cd /home/$NB_USER/jumanpp-1.01 && make install
+
+USER $NB_UID
 
 ####################################################################################################
 
