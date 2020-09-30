@@ -126,7 +126,7 @@ EXPOSE 8888
 
 ####################################################################################################
 # ADDED by RK for JUMAN++
-RUN pip install torch transformers pyknp
+RUN pip install torch transformers pyknp WordCloud
 
 USER root
 RUN apt-get update \
@@ -169,6 +169,8 @@ CMD ["start-notebook.sh"]
 # Copy local files as late as possible to avoid cache busting
 COPY start.sh start-notebook.sh start-singleuser.sh /usr/local/bin/
 COPY jupyter_notebook_config.py /etc/jupyter/
+RUN mkdir /home/$NB_USER/fonts
+COPY ./fonts/ヒラギノ角ゴシック_W4.ttc /home/$NB_USER/fonts/
 
 # Fix permissions on /etc/jupyter as root
 USER root
@@ -178,4 +180,3 @@ RUN fix-permissions /etc/jupyter/
 USER $NB_UID
 
 WORKDIR $HOME
-# test
