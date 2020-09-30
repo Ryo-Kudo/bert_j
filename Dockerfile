@@ -178,3 +178,4 @@ RUN fix-permissions /etc/jupyter/
 USER $NB_UID
 
 WORKDIR $HOME
+# test
