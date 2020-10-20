@@ -126,7 +126,7 @@ EXPOSE 8888
 
 ####################################################################################################
 # ADDED by RK for JUMAN++
-RUN pip install torch transformers pyknp WordCloud pandas mecab-python3 unidic-lite openpyxl
+RUN pip install torch transformers pyknp WordCloud
 
 USER root
 RUN apt-get update \
@@ -179,7 +179,4 @@ RUN fix-permissions /etc/jupyter/
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_UID
 
-# Change WORKDIR from $HOME to a directory of the host
-# VOLUME /root/workspace
-# WORKDIR /root/workspace
 WORKDIR $HOME
